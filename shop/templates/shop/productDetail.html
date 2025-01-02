@@ -1,0 +1,81 @@
+{% extends "shop/layout.html" %}
+
+{% block title %}{{product.product_name}}{% endblock %}
+
+{% block style %}
+    {{block.super}}
+    
+{% endblock %}
+
+{% block content %}
+
+<div class="container card mt-4">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+            <img src="{{product.image.url}}" alt="Product"
+                class="img-fluid rounded mb-3 product-image" id="mainImage">
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h2 class="mb-3">{{product.product_name}}</h2>
+            <p class="text-muted mb-4">{{product.description}}</p>
+            <div class="mb-3">
+                <span class="h4 me-2">&#8377; <b class="p_price">{{product.price}}</b></span>
+                <!--
+                    <span class="text-muted"><s>$399.99</s></span>
+                    -->
+            </div>
+            <div class="mb-3">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-half text-warning"></i>
+                <span class="ms-2">4.5 (120 reviews)</span>
+            </div>
+            <p class="mb-4">{{product.product_description}}</p>
+            <form id="addToCartForm" method="POST" action="">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg mb-3">
+                    <i class="bi bi-bag-heart"></i> Add to Cart
+                </button>
+
+                <button class="btn btn-outline-success btn-info text-dark btn-lg mb-3">
+                    <i class="bi bi-bag-fill"></i> Buy Now
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block script %}
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart'))
+            
+        if (localStorage.getItem("cart") == null){
+             cart = {}
+        } else {
+            updateCart(cart);
+        }
+
+        // for updating product in cart
+        function updateCart(cart){
+            let sum = 0
+            for (let item in cart){
+                sum += cart[item][0]
+                
+            }
+            localStorage.setItem("cart",JSON.stringify(cart))
+            document.getElementById("cart").innerHTML = sum
+
+            // updatePopover(cart)
+        }
+
+    </script>
+{% endblock %}
